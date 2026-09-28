@@ -22,7 +22,9 @@ streamlit run web_app_plotter.py
 ```
 
 Suppress new browser window opening when launching the script:
+```python
 streamlit run web_app_plotter.py --server.headless true
+```
 
 If interested in further usage for other projects, import the "src/main.py", that contains all the main project functions. See "test_runner.py" as an example.
 

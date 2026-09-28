@@ -12,10 +12,14 @@ Android & iOS exported chats.
 Supported hour formats: 0-24, 1-12 am/pm.
 
 # Requirements
+```python
 pip install -r requirements.txt
+```
 
 # Usage
+```python
 streamlit run web_app_plotter.py
+```
 
 Suppress new browser window opening when launching the script:
 streamlit run web_app_plotter.py --server.headless true

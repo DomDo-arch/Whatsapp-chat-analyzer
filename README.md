@@ -20,9 +20,6 @@ streamlit run web_app_plotter.py
 Suppress new browser window opening when launching the script:
 streamlit run web_app_plotter.py --server.headless true
 
-On linux machines:
-bash run.sh
-
 If interested in further usage for other projects, import the "src/main.py", that contains all the main project functions. See "test_runner.py" as an example.
 
 # Contact

@@ -26,7 +26,7 @@ def count_links(df):
 
 	return(links_dict)
 
-def count_links_df(df):
+def count_links_df(df, date_format):
 	
 	df = count_links(df)
 	

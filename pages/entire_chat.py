@@ -278,16 +278,17 @@ def Day_page(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 	if df is not None:
 		if len(df) == 1:
 			df = df[0]
-
-			st.header("Day stats")
-			st.write("a) Chat days:", days_without_sending_message(df, date_selectbox)[0])
-			st.write("b) Days sending at least a message:", days_without_sending_message(df, date_selectbox)[1])
-			st.write("c) Percent b/a:", days_without_sending_message(df, date_selectbox)[2])
+			try:
+				st.header("Day stats")
+				st.write("a) Chat days:", days_without_sending_message(df, date_selectbox)[0])
+				st.write("b) Days sending at least a message:", days_without_sending_message(df, date_selectbox)[1])
+				st.write("c) Percent b/a:", days_without_sending_message(df, date_selectbox)[2])
 			
-			st.header("Day part")
-			st.write(gini(list(day_part_df(df).messages_count)))
-			st.bar_chart(day_part_df(df), x="day_part", y="messages_count", sort=False)
-				
+				st.header("Day part")
+				st.write(gini(list(day_part_df(df).messages_count)))
+				st.bar_chart(day_part_df(df), x="day_part", y="messages_count", sort=False)
+			except ZeroDivisionError:
+				pass
 			#st.write(am_pm_format(df))
 
 			if am_pm_format(df) == True:

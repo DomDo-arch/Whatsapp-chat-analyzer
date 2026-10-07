@@ -408,7 +408,7 @@ def Months_page(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 	if df is not None:
 		if len(df) == 1:
 			df = df[0]
-			month_messages = month_count_df(df)
+			month_messages = month_count_df(df, date_selectbox)
 			st.header("Month messages count bar chart")
 			st.bar_chart(month_messages, x="month", y="messages_count", sort=False)
 		elif len(df) > 1:

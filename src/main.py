@@ -12,4 +12,3 @@ from src.season_stats import season_df, season_dir
 from src.first_messages import first_message_each_day_df
 
 from src.gini_index import gini
-from src.date_format import date_format

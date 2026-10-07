@@ -36,7 +36,7 @@ def month_count(df, date_format):
 
 def month_count_df(df, date_format):
 	
-	df = month_count(df)
+	df = month_count(df, date_format)
 	
 	col_rows = []
 	

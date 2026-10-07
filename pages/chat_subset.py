@@ -182,7 +182,7 @@ def Message_page_subset(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox)
 		
 			last_date = df.date[len(df.date)-1]
 		
-			df = filter_messages_days_interval(df, df.date[len(df.date)-1], days_interval=days_interval)
+			df = filter_messages_days_interval(df, df.date[len(df.date)-1], days_interval=days_interval, date_format=date_selectbox)
 			st.write(df)
 		
 			# Words stats
@@ -190,16 +190,16 @@ def Message_page_subset(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox)
 			st.write(gini(list(count_messages_df(df).messages_count)))
 			st.write(count_messages_df(df))
 			
-			st.header("Z-score")
-			values = gini([abs(i) for i in users_z_score(df).z_score])
-			st.write(values)
-			st.write(users_z_score(df))
-			
-			st.header("Users word table")
-			word = st.selectbox("Word", list(set(count_words_df(df).word)))
-			st.write(user_word_table(df, word))
-
 			try:
+				st.header("Z-score")
+				values = gini([abs(i) for i in users_z_score(df).z_score])
+				st.write(values)
+				st.write(users_z_score(df))
+			
+				st.header("Users word table")
+				word = st.selectbox("Word", list(set(count_words_df(df).word)))
+				st.write(user_word_table(df, word))
+
 				st.header("Gini for each user table")
 				with st.spinner("Loading..."):
 					st.write(gini(list(gini_user_df(df).user_gini)))
@@ -232,7 +232,6 @@ def Message_page_subset(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox)
 
 		elif len(df) != 0 and len(df)>1:
 				st.header("Chat messages")
-				
 				
 				dfs, filtered_dfs = [], []
 				
@@ -270,14 +269,14 @@ def Links_page_subset(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 			st.write(period)
 			if len(df) == 1:
 				df = df[0]
-				df = filter_messages_days_interval(df, df.date[len(df.date)-1], days_interval=days_interval)
+				df = filter_messages_days_interval(df, df.date[len(df.date)-1], days_interval=days_interval, date_format=date_selectbox)
 
 				# Links stats
 				st.header("Links table")
 				st.write(make_links_table(df))
 			
 				# Month stats
-				links = count_links_df(df)
+				links = count_links_df(df, date_format=date_selectbox)
 				if len(links) != 0:
 					st.header("Links for each month")
 					st.write(links)
@@ -345,7 +344,7 @@ def Hours_page_subset(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 		if len(df) == 1:
 			df = df[0]
 			last_date = df.date[len(df.date)-1]
-			df = filter_messages_days_interval(df, df.date[len(df.date)-1], days_interval=days_interval)
+			df = filter_messages_days_interval(df, df.date[len(df.date)-1], days_interval=days_interval, date_format=date_selectbox)
 
 			if am_pm_format(df) == True:
 				st.header("AM hour stats")
@@ -408,13 +407,13 @@ def Day_page_subset(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 		if len(df) == 1:
 			df = df[0]
 			last_date = df.date[len(df.date)-1]
-			df = filter_messages_days_interval(df, df.date[len(df.date)-1], days_interval=days_interval)
+			df = filter_messages_days_interval(df, df.date[len(df.date)-1], days_interval=days_interval, date_format=date_selectbox)
 		
 			try:
 				st.header("Day stats")
-				st.write("a) Chat days:", days_without_sending_message(df)[0])
-				st.write("b) Days sending at least a message:", days_without_sending_message(df)[1])
-				st.write("c) Percent b/a:", days_without_sending_message(df)[2])
+				st.write("a) Chat days:", days_without_sending_message(df, date_format=date_selectbox)[0])
+				st.write("b) Days sending at least a message:", days_without_sending_message(df, date_format=date_selectbox)[1])
+				st.write("c) Percent b/a:", days_without_sending_message(df, date_format=date_selectbox)[2])
 			except ZeroDivisionError:
 				pass
 		
@@ -532,7 +531,7 @@ def Weekday_page_subset(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox)
 		if len(df) == 1:
 			
 			df = df[0]
-			df = filter_messages_days_interval(df, df.date[len(df.date)-1], days_interval=days_interval)
+			df = filter_messages_days_interval(df, df.date[len(df.date)-1], days_interval=days_interval, date_format=date_selectbox)
 			last_date = df.date[len(df.date)-1]
 	
 			st.header("Weekday stats")
@@ -595,9 +594,9 @@ def Months_page_subset(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 	if df is not None:
 		if len(df) == 1:
 			df = df[0]
-			df = filter_messages_days_interval(df, df.date[len(df.date)-1], days_interval=days_interval)
+			df = filter_messages_days_interval(df, df.date[len(df.date)-1], days_interval=days_interval, date_format=date_selectbox)
 			
-			month_messages = month_count_df(df)
+			month_messages = month_count_df(df, date_format=date_selectbox)
 			st.header("Month messages count bar chart")
 			st.bar_chart(month_messages, x="month", y="messages_count", sort=False)
 		
@@ -659,7 +658,7 @@ def Year_page_subset(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 
 			df = df[0]
 			last_date = df.date[len(df.date)-1]
-			df = filter_messages_days_interval(df, df.date[len(df.date)-1], days_interval=days_interval)
+			df = filter_messages_days_interval(df, df.date[len(df.date)-1], days_interval=days_interval, date_format=date_selectbox)
 		
 			st.header("Year stats")
 			st.bar_chart(year_messages_df(df), x="year", y="messages_count")

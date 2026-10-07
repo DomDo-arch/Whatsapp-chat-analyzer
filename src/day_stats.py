@@ -1,11 +1,9 @@
 try:
 	from src.make_table_from_chat import make_table
 	from src.words_stats import words_stats
-	from src.date_format import date_format
 except ModuleNotFoundError:
 	from make_table_from_chat import make_table
 	from words_stats import words_stats
-	from date_format import date_format
 
 from collections import Counter
 from pandas import DataFrame

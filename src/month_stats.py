@@ -10,7 +10,7 @@ from datetime import date
 from os import listdir
 from pandas import DataFrame
 
-def month_count(df):
+def month_count(df, date_format):
 
 	month_list = []
 	
@@ -34,7 +34,7 @@ def month_count(df):
 			
 	return month_num
 
-def month_count_df(df):
+def month_count_df(df, date_format):
 	
 	df = month_count(df)
 	

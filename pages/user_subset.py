@@ -14,7 +14,6 @@ try:
 	from src.year_stats import year_messages_df
 	from src.gini_index import gini
 	from src.gini_user_table import gini_user_df
-	from src.date_format import date_format
 
 except ModuleNotFoundError:
 	
@@ -44,7 +43,6 @@ except ModuleNotFoundError:
 	from year_stats import year_messages_df
 	from gini_index import gini
 	from gini_user_table import gini_user_df
-	from date_format import date_format
 	
 import streamlit as st
 
@@ -165,7 +163,7 @@ def Message_user_subset(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox)
 			
 		df = filter_user_df(df, option_user)
 		
-		df = filter_messages_days_interval(df, df.date[len(df.date)-1], days_interval=days_interval)
+		df = filter_messages_days_interval(df, df.date[len(df.date)-1], days_interval=days_interval, date_format=date_selectbox)
 			
 		st.header("Chat table user filter")
 		st.write(df)
@@ -225,13 +223,13 @@ def Links_user_subset(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 			
 		df = filter_user_df(df, option_user)
 			
-		df = filter_messages_days_interval(df, df.date[len(df.date)-1], days_interval=days_interval)
+		df = filter_messages_days_interval(df, df.date[len(df.date)-1], days_interval=days_interval, date_format=date_selectbox)
 			
 		st.header("Links table")
 		st.write(make_links_table(df))
 		
 		# Month stats
-		links = count_links_df(df)
+		links = count_links_df(df, date_format=date_selectbox)
 		if len(links) != 0:
 			st.header("Links for each month")
 			st.write(links)
@@ -321,13 +319,13 @@ def Day_user_subset(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 			
 		df = filter_user_df(df, option_user)
 			
-		df = filter_messages_days_interval(df, df.date[len(df.date)-1], days_interval=days_interval)
+		df = filter_messages_days_interval(df, df.date[len(df.date)-1], days_interval=days_interval, date_format=date_selectbox)
 			
 		try:
 			st.header("Day stats")
-			st.write("a) Chat days:", days_without_sending_message(df)[0])
-			st.write("b) Days sending at least a message:", days_without_sending_message(df)[1])
-			st.write("c) Percent b/a:", days_without_sending_message(df)[2])
+			st.write("a) Chat days:", days_without_sending_message(df, date_format=date_selectbox)[0])
+			st.write("b) Days sending at least a message:", days_without_sending_message(df, date_format=date_selectbox)[1])
+			st.write("c) Percent b/a:", days_without_sending_message(df, date_format=date_selectbox)[2])
 		except ZeroDivisionError:
 			pass
 		
@@ -384,7 +382,7 @@ def Weekday_user_subset(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox)
 			
 		df = filter_user_df(df, option_user)
 			
-		df = filter_messages_days_interval(df, df.date[len(df.date)-1], days_interval=days_interval)
+		df = filter_messages_days_interval(df, df.date[len(df.date)-1], days_interval=days_interval, date_format=date_selectbox)
 		
 		# Weekday stats
 		st.header("Weekday stats")
@@ -417,9 +415,9 @@ def Months_user_subset(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 			
 		df = filter_user_df(df, option_user)
 			
-		df = filter_messages_days_interval(df, df.date[len(df.date)-1], days_interval=days_interval)
+		df = filter_messages_days_interval(df, df.date[len(df.date)-1], days_interval=days_interval, date_format=date_selectbox)
 	
-		month_messages = month_count_df(df)
+		month_messages = month_count_df(df, date_format=date_selectbox)
 		st.header("Month messages count bar chart")
 		st.bar_chart(month_messages, x="month", y="messages_count", sort=False)
 		
@@ -450,7 +448,7 @@ def Year_user_subset(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 			
 		df = filter_user_df(df, option_user)
 			
-		df = filter_messages_days_interval(df, df.date[len(df.date)-1], days_interval=days_interval)
+		df = filter_messages_days_interval(df, df.date[len(df.date)-1], days_interval=days_interval, date_format=date_selectbox)
 		st.header("Year stats")
 		st.bar_chart(year_messages_df(df), x="year", y="messages_count")
 		

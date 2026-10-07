@@ -100,7 +100,7 @@ def message_date_list(df):
 	for i in sorted(message_day):
 		print(i[0], i[1])
 		
-def days_without_sending_message(df):
+def days_without_sending_message(df, date_format):
 	
 	first_chat_date = df.date[0]
 	last_chat_date = df.date[len(df.date)-1]

@@ -276,7 +276,7 @@ def Hours_user_subset(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 			
 		df = filter_user_df(df, option_user)
 			
-		df = filter_messages_days_interval(df, df.date[len(df.date)-1], days_interval=days_interval)
+		df = filter_messages_days_interval(df, df.date[len(df.date)-1], days_interval=days_interval, date_format=date_selectbox)
 	
 		if am_pm_format(df) == True:
 			if len(hour_am_pm_df(df)[0]) != 0:

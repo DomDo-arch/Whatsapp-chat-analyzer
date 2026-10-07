@@ -62,7 +62,7 @@ def filter_messages_date_interval(df, start_date, end_date):
 
 	return df
 
-def filter_messages_days_interval(df, start_date, days_interval, date_format=date_selectbox):
+def filter_messages_days_interval(df, start_date, days_interval, date_format):
 	
 	df_counter = Counter(df.date)
 	

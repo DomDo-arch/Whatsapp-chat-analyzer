@@ -3,7 +3,6 @@ try:
 	from src.date_format import date_format
 except ModuleNotFoundError:
 	from make_table_from_chat import make_table
-	from date_format import date_format
 
 from collections import Counter, OrderedDict
 from datetime import date

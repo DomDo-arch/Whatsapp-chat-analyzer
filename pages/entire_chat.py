@@ -192,12 +192,13 @@ def Message_page(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 			
 			# First message
 			first_message_df = first_message_each_day_df(df)
-			st.header("First message each day stats")
-			st.write(gini(list(first_message_df.messages_count)))
-			st.write(first_message_df)
+			if len(first_message_df) != 0:
+				st.header("First message each day stats")
+				st.write(gini(list(first_message_df.messages_count)))
+				st.write(first_message_df)
 				
-			st.header("First message each day bar chart")
-			st.bar_chart(first_message_df, x="user", y="messages_count")
+				st.header("First message each day bar chart")
+				st.bar_chart(first_message_df, x="user", y="messages_count")
 
 		elif len(df) != 0 and len(df)>1:
 			st.header("Chat messages")
@@ -216,7 +217,8 @@ def Links_page(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 		
 			st.header("Links for each month")
 			#st.write("std:", np.std(list(count_links_df(df).month_count)))
-			links = count_links_df(df)
+			links = count_links_df(df, date_selectbox)
+			
 			st.write(links)
 		
 			st.header("Links for each user table")
@@ -278,9 +280,9 @@ def Day_page(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 			df = df[0]
 
 			st.header("Day stats")
-			st.write("a) Chat days:", days_without_sending_message(df)[0])
-			st.write("b) Days sending at least a message:", days_without_sending_message(df)[1])
-			st.write("c) Percent b/a:", days_without_sending_message(df)[2])
+			st.write("a) Chat days:", days_without_sending_message(df, date_selectbox)[0])
+			st.write("b) Days sending at least a message:", days_without_sending_message(df, date_selectbox)[1])
+			st.write("c) Percent b/a:", days_without_sending_message(df, date_selectbox)[2])
 			
 			st.header("Day part")
 			st.write(gini(list(day_part_df(df).messages_count)))

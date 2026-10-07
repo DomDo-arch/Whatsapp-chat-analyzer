@@ -1,12 +1,3 @@
-try:
-	from src.date_format import date_format
-	from src.am_pm_format import am_pm_format
-	from src.ios_format import ios_format
-except ModuleNotFoundError:
-	from date_format import date_format
-	from am_pm_format import am_pm_format
-	from ios_format import ios_format
-	
 from re import findall
 from datetime import date
 from pandas import DataFrame

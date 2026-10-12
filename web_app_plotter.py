@@ -92,7 +92,7 @@ def Weekdays():
 	Weekday_user_subset(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox)
 	
 def Months():
-	Month_user_subset(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox)
+	Months_user_subset(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox)
 	
 def Years():
 	Year_user_subset(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox)

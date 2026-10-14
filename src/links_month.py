@@ -26,7 +26,7 @@ def count_links(df, date_format):
 
 def count_links_df(df, date_format):
 	
-	df = count_links(df)
+	df = count_links(df, date_format)
 	
 	col_rows = []
 	

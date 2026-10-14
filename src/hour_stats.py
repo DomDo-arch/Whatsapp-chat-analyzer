@@ -71,7 +71,7 @@ def day_part(df):
 	
 	return col_rows
 
-def hour_dir(folder, destination=None, title_list=None):
+def hour_dir0(folder, destination=None, title_list=None):
 	
 	weekday_list = []
 	
@@ -84,6 +84,34 @@ def hour_dir(folder, destination=None, title_list=None):
 				else:
 					filename = folder[file].replace(".txt","").split("/")[len(folder[file].split("/"))-1]
 				weekday_list.append([filename, day_parts[0], day_parts[1]])
+	else:
+		for file in listdir(folder):
+			if file.endswith(".txt"):
+				day_parts = day_part(make_table(f"{folder}/{file}"))
+				filename = file.replace(".txt","")
+				weekday_list.append([filename, day_parts[0], day_parts[1]])
+			
+	df = DataFrame(weekday_list)
+	
+	df.rename(columns = {0:"title", 1:"first_half_day",2:"second_half_day"}, inplace = True)
+	
+	if destination is not None:
+		df.to_csv(destination, index = False)
+
+	return df
+
+def hour_dir(folder, destination=None, title_list=None):
+	
+	weekday_list = []
+	
+	if isinstance(folder[0], DataFrame):
+		for file in range(len(folder)):
+			day_parts = day_part(folder[file])
+			if title_list is not None:
+				filename = title_list[file]
+			else:
+				filename = folder[file].replace(".txt","").split("/")[len(folder[file].split("/"))-1]
+			weekday_list.append([filename, day_parts[0], day_parts[1]])
 	else:
 		for file in listdir(folder):
 			if file.endswith(".txt"):
@@ -158,7 +186,7 @@ table = [[1,2],[3,4]]
 	
 if __name__ == "__main__":
 
-    input_text = "tests/test_chat.txt"
+    input_text = "input_txt/test_chat.txt"
     
     #df = make_table(input_text)
     
@@ -171,12 +199,18 @@ if __name__ == "__main__":
     
     #print(hour_stats_dir(["tests/test_chat.txt", "tests/chat_pasquetta.txt"], title_list=["test1", "test2"]))
     
-    df = hour_stats_dir(["tests/test_chat.txt", "tests/chat_pasquetta.txt"], title_list=["test1", "test2"])
+    #df = hour_stats_dir(["tests/test_chat.txt", "tests/chat_pasquetta.txt"], title_list=["test1", "test2"])
     
-    title_label = list(df.title)
-    df = df.drop(columns=['title'])
+    #title_label = list(df.title)
+    #df = df.drop(columns=['title'])
 
-    plt.figure(figsize=(len(df.columns),len(df)))
-    sns.heatmap(df, yticklabels=title_label, annot=True)
+    #plt.figure(figsize=(len(df.columns),len(df)))
+    #sns.heatmap(df, yticklabels=title_label, annot=True)
 
-    plt.show()
+    #plt.show()
+    print(hour_dir([make_table("input_txt/chat_canzoniere_2022.txt")], title_list = ["test"]))
+    
+    df = make_table("input_txt/chat_canzoniere_2022.txt")
+    
+    #print(hour(df))
+    #print(day_part(df))

@@ -7,7 +7,7 @@ from pandas import DataFrame
 from os import listdir
 from collections import Counter
 
-def count_links(df):
+def count_links(df, date_format):
 	
 	links_list = []
 	

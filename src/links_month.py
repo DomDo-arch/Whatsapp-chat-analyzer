@@ -66,13 +66,13 @@ def count_links_month(folder):
 	
 	return df
 
-def links_month_dir(folder, destination=None, title_list=None):
+def links_month_dir(folder, date_format, destination=None, title_list=None):
 	
 	links_list = []
 	
 	if isinstance(folder[0], DataFrame):
 		for i in range(len(folder)):
-			links_dicts = count_links(folder[i])
+			links_dicts = count_links(folder[i], date_format)
 			links_dicts["title"] = title_list[i]
 			links_list.append(links_dicts)
 

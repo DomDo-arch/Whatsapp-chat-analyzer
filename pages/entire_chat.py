@@ -239,7 +239,7 @@ def Links_page(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 			
 		elif len(df) > 1:
 			st.header("Links for each month")
-			st.write(links_month_dir(df, title_list = filenames))
+			st.write(links_month_dir(df, date_selectbox, title_list = filenames))
 			
 			st.header("Domains count")
 			st.write(make_domains_count_dir(df, title_list = filenames))
@@ -266,7 +266,8 @@ def Hours_page(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 				st.bar_chart(hour_df(df), x="hour", y="hour_count", sort=False)	
 		elif len(df) > 1:
 			st.header("Day part stats")
-			#st.write(hour_dir(df, title_list=filenames))
+			st.write(hour_dir(df, title_list=filenames))
+			pass
 
 def Day_page(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 	

@@ -239,7 +239,7 @@ def Message_page_subset(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox)
 					dfs.append(df[i])
 				
 				for i in dfs:
-					filtered_dfs.append(filter_messages_days_interval(i, i.date[len(i.date)-1], days_interval=days_interval))
+					filtered_dfs.append(filter_messages_days_interval(i, i.date[len(i.date)-1], days_interval=days_interval, date_format=date_selectbox))
 				
 				st.write(total_messages_dir(filtered_dfs, title_list=filenames))
 
@@ -303,10 +303,10 @@ def Links_page_subset(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 					dfs.append(df[i])
 				
 				for i in dfs:
-					filtered_dfs.append(filter_messages_days_interval(i, i.date[len(i.date)-1], days_interval=days_interval))
+					filtered_dfs.append(filter_messages_days_interval(i, i.date[len(i.date)-1], days_interval=days_interval, date_format=date_selectbox))
 					
 				st.header("Links for each month")
-				st.write(links_month_dir(filtered_dfs, title_list=filenames))
+				st.write(links_month_dir(filtered_dfs, title_list=filenames, date_format=date_selectbox))
 				
 				st.header("Domains count")
 				st.write(make_domains_count_dir(filtered_dfs, title_list=filenames))
@@ -368,7 +368,7 @@ def Hours_page_subset(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 					dfs.append(df[i])
 				
 				for i in dfs:
-					filtered_dfs.append(filter_messages_days_interval(i, i.date[len(i.date)-1], days_interval=days_interval))
+					filtered_dfs.append(filter_messages_days_interval(i, i.date[len(i.date)-1], days_interval=days_interval, date_format=date_selectbox))
 					
 				#st.write(df)
 				#st.write(hour_stats_dir(filtered_dfs, title_list=filename))
@@ -458,7 +458,7 @@ def Day_page_subset(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 				dfs.append(df[i])
 				
 			for i in dfs:
-				filtered_dfs.append(filter_messages_days_interval(i, i.date[len(i.date)-1], days_interval=days_interval))
+				filtered_dfs.append(filter_messages_days_interval(i, i.date[len(i.date)-1], days_interval=days_interval, date_format=date_selectbox))
 				
 			if am_pm_format(filtered_dfs[0]):
 				for i in range(len(filtered_dfs)):
@@ -546,7 +546,7 @@ def Weekday_page_subset(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox)
 				dfs.append(df[i])
 				
 			for i in dfs:
-				filtered_dfs.append(filter_messages_days_interval(i, i.date[len(i.date)-1], days_interval=days_interval))
+				filtered_dfs.append(filter_messages_days_interval(i, i.date[len(i.date)-1], days_interval=days_interval, date_format=date_selectbox))
 			
 			df = weekday_folder(filtered_dfs, title_list = filename)
 			
@@ -610,7 +610,7 @@ def Months_page_subset(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 				dfs.append(df[i])
 				
 			for i in dfs:
-				filtered_dfs.append(filter_messages_days_interval(i, i.date[len(i.date)-1], days_interval=days_interval))
+				filtered_dfs.append(filter_messages_days_interval(i, i.date[len(i.date)-1], days_interval=days_interval, date_format=date_selectbox))
 			
 			df = month_dir(filtered_dfs, title_list = filename)
 			
@@ -688,7 +688,7 @@ def Year_page_subset(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 				dfs.append(df[i])
 				
 			for i in dfs:
-				filtered_dfs.append(filter_messages_days_interval(i, i.date[len(i.date)-1], days_interval=days_interval))
+				filtered_dfs.append(filter_messages_days_interval(i, i.date[len(i.date)-1], days_interval=days_interval, date_format=date_selectbox))
 				
 			#st.bar_chart(year_dir([year_messages_df(filtered_dfs[i]) for i in range(len(filtered_dfs))]), x="year", y="messages_count")
 				

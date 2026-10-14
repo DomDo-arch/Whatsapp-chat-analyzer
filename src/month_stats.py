@@ -51,13 +51,15 @@ def month_count_df(df, date_format):
 	
 	return df
 
+date_format = "%d/%m/%y"
+
 def month_dir(folder, destination=None, title_list=None):
 	
 	month_list = []
 	
 	if isinstance(folder[0], DataFrame):
 		for i in range(len(folder)):
-			month_dict = month_count(folder[i])
+			month_dict = month_count(folder[i], date_format)
 			month_dict["title"] = title_list[i]
 			month_list.append(month_dict)
 	else:

@@ -71,35 +71,6 @@ def day_part(df):
 	
 	return col_rows
 
-def hour_dir0(folder, destination=None, title_list=None):
-	
-	weekday_list = []
-	
-	if isinstance(folder, list):
-		for file in range(len(folder)):
-			if folder[file].endswith(".txt"):
-				day_parts = day_part(make_table(f"{folder[file]}"))
-				if title_list is not None:
-					filename = title_list[file]
-				else:
-					filename = folder[file].replace(".txt","").split("/")[len(folder[file].split("/"))-1]
-				weekday_list.append([filename, day_parts[0], day_parts[1]])
-	else:
-		for file in listdir(folder):
-			if file.endswith(".txt"):
-				day_parts = day_part(make_table(f"{folder}/{file}"))
-				filename = file.replace(".txt","")
-				weekday_list.append([filename, day_parts[0], day_parts[1]])
-			
-	df = DataFrame(weekday_list)
-	
-	df.rename(columns = {0:"title", 1:"first_half_day",2:"second_half_day"}, inplace = True)
-	
-	if destination is not None:
-		df.to_csv(destination, index = False)
-
-	return df
-
 def hour_dir(folder, destination=None, title_list=None):
 	
 	weekday_list = []

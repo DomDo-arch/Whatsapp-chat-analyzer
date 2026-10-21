@@ -6,7 +6,7 @@ except ModuleNotFoundError:
 from collections import Counter, OrderedDict
 from datetime import date
 from os import listdir
-from pandas import DataFrame
+from pandas import DataFrame, concat
 
 def month_count(df):
 
@@ -48,7 +48,7 @@ def season_df(df):
 	
 	return df
 
-def season(df):
+def season(df: DataFrame) -> dict[str:int]:
 	
 	months = month_count(df)
 	
@@ -107,15 +107,41 @@ def season_dir(folder, destination=None, title_list=None):
 		df.to_csv(destination, index = False)
 	
 	return df
+
+def season_percentage(df: DataFrame, title) -> DataFrame:
+	
+	df = season_dir([df], title_list = [title])
+	df = df.set_index("title")
+
+	res = df.div(df.sum(axis = 1), axis = 0)
+	res *= 100
+	
+	return res.reset_index()
+
+def season_percentage_folder(folder: list[DataFrame], title_list:list[str]) -> DataFrame:
+	
+	dfs = []	
+
+	for i in range(len(folder)):
+		dfs.append(season_percentage(folder[i], title_list[i]))
+
+	df = concat(dfs)
+	
+	return df
 	
 if __name__ == "__main__":
 
-    input_text = "tests/test_chat.txt"
+    input_text = "input_txt/chat_canzoniere_2022.txt"
     
     df = make_table(input_text)
+    
+    #print(season(df))
 
     #print(folder_to_csv("tests", "output_csv/season.csv"))
     
     #print(season_dir(["tests/test_chat.txt", "tests/chat_family.txt"], title_list=["test","family"]))
     
-    #print(season_dir([make_table("tests/test_chat.txt")], title_list=["test1"]))
+    dfs = season_dir([make_table("input_txt/chat_canzoniere_2022.txt"), make_table("input_txt/chat_family.txt")], title_list=["canzoniere", "family"])
+    #print(dfs)
+    
+    print(season_percentage_folder([make_table("input_txt/chat_canzoniere_2022.txt")], title_list = ["canzoniere", "family"]))

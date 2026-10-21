@@ -6,7 +6,7 @@ except ModuleNotFoundError:
 from collections import Counter, OrderedDict
 from datetime import date
 from os import listdir
-from pandas import DataFrame
+from pandas import DataFrame, concat
 
 def am_pm_format(df):
 	
@@ -76,25 +76,25 @@ def day_part_am_pm(df):
 	
 	return df
 
-def day_hour_am_pm_df(df, weekday):
+def day_hour_am_pm_df(df, day_hour):
 	
-	weekday_am_hour, weekday_pm_hour = [], []
+	day_hour_am_hour, day_hour_pm_hour = [], []
 	
 	for i in range(len(df)):
 		if "AM" in df.hours[i]:
-			weekday_am_hour.append([df.weekday[i], int(df.hours[i].split(":")[0])])
+			day_hour_am_hour.append([df.day_hour[i], int(df.hours[i].split(":")[0])])
 		else:
-			weekday_pm_hour.append([df.weekday[i], int(df.hours[i].split(":")[0])])
+			day_hour_pm_hour.append([df.day_hour[i], int(df.hours[i].split(":")[0])])
 	
 	mon_am_hour, mon_pm_hour = [], []
 	
-	for i in weekday_am_hour:
-		if i[0] == weekday:
+	for i in day_hour_am_hour:
+		if i[0] == day_hour:
 			if i[1] != "":
 				mon_am_hour.append(int(i[1]))
 				
-	for i in weekday_pm_hour:
-		if i[0] == weekday:
+	for i in day_hour_pm_hour:
+		if i[0] == day_hour:
 			if i[1] != "":
 				mon_pm_hour.append(int(i[1]))
 	
@@ -108,14 +108,14 @@ def day_hour_am_pm_df(df, weekday):
 
 def week_day_hour_am_pm_df(df):
 	
-	week_day_hour_am_cols, week_day_hour_pm_cols = [], []
+	day_hour_day_hour_am_cols, day_hour_day_hour_pm_cols = [], []
 	
-	for weekday in range(7):
-		week_day_hour_am_cols.append(day_hour_am_pm_df(df, weekday)[0])
-		week_day_hour_pm_cols.append(day_hour_am_pm_df(df, weekday)[1])
+	for day_hour in range(7):
+		day_hour_day_hour_am_cols.append(day_hour_am_pm_df(df, day_hour)[0])
+		day_hour_day_hour_pm_cols.append(day_hour_am_pm_df(df, day_hour)[1])
 		
-	df_am = DataFrame(week_day_hour_am_cols)
-	df_pm = DataFrame(week_day_hour_pm_cols)
+	df_am = DataFrame(day_hour_day_hour_am_cols)
+	df_pm = DataFrame(day_hour_day_hour_pm_cols)
 	
 	df_am.sort_index(axis=1, inplace=True)
 	df_pm.sort_index(axis=1, inplace=True)
@@ -172,17 +172,17 @@ def day_part_df(df):
 	
 	return df
 #
-def day_hour_df(df, weekday):
+def week_day_hour_df(df, day_hour):
 
-	weekday_hour = []
+	day_hour_hour = []
 	
 	for i in range(len(df)):
-		weekday_hour.append([df.weekday[i], df.hours[i].split(":")[0]])
+		day_hour_hour.append([df.day_hour[i], df.hours[i].split(":")[0]])
 		
 	mon_hour = []
 	
-	for i in weekday_hour:
-		if i[0] == weekday:
+	for i in day_hour_hour:
+		if i[0] == day_hour:
 			if i[1] != "":
 				mon_hour.append(int(i[1]))
 			
@@ -195,12 +195,12 @@ def day_hour_df(df, weekday):
 #
 def week_day_hour_df(df):
 	
-	week_day_hour_cols = []
+	day_hour_day_hour_cols = []
 	
-	for weekday in range(7):
-		week_day_hour_cols.append(day_hour_df(df, weekday))
+	for day_hour in range(7):
+		day_hour_day_hour_cols.append(day_hour_df(df, day_hour))
 		
-	df = DataFrame(week_day_hour_cols)
+	df = DataFrame(day_hour_day_hour_cols)
 	
 	df.sort_index(axis=1, inplace=True)
 	
@@ -256,13 +256,81 @@ def day_hour_dir(folder, destination=None, title_list=None):
 		
 	return df
 
+def day_hour_percentage(df: DataFrame, title: str) -> DataFrame:
+	
+	df = day_hour_dir([df], title_list = [title])
+	df = df.set_index("title")
+	
+	res = df.div(df.sum(axis = 1), axis = 0)
+	res *= 100
+	
+	return res.reset_index()
+
+def day_hour_percentage_folder(folder: list[DataFrame], title_list: list[str]) -> DataFrame:
+	
+	dfs = []
+	
+	for i in range(len(folder)):
+		dfs.append(day_hour_percentage(folder[i], title_list[i]))
+	
+	df = concat(dfs)
+	
+	return df
+
+def find_max_day_hour(df: DataFrame, index: int) -> list[str, str, float]:
+
+	max_value = max([i for i in df.iloc[index, :].dropna() if isinstance(i, float)])
+	titles = list(df.title)
+	
+	max_index = 0
+	for i in range(len(df.columns)):
+		if df.iloc[index, i] == max_value:
+			max_index = i
+			
+	return [titles[index], df.columns[max_index], max_value]
+
+def find_min_day_hour(df: DataFrame, index: int) -> list[str, str, float]:
+
+	min_value = min([i for i in df.iloc[index, :].dropna() if isinstance(i, float)])
+	titles = list(df.title)
+	
+	min_index = 0
+	for i in range(len(df.columns)):
+		if df.iloc[index, i] == min_value:
+			min_index = i
+			
+	return [titles[index], df.columns[min_index], min_value]
+
+def find_max_day_hour_dir(df: DataFrame) -> DataFrame:
+	
+	cols = []
+	
+	for i in range(len(df)):
+		cols.append(find_max_day_hour(df, i))
+		
+	df = DataFrame(cols)
+	df.rename(columns = {0: "chat", 1: "day_hour", 2:"percentage"}, inplace = True)
+	
+	return df
+
+def find_min_day_hour_dir(df: DataFrame) -> DataFrame:
+	
+	cols = []
+	
+	for i in range(len(df)):
+		cols.append(find_min_day_hour(df, i))
+		
+	df = DataFrame(cols)
+	df.rename(columns = {0: "chat", 1: "day_hour", 2:"percentage"}, inplace = True)
+	
+	return df
+
 if __name__ == "__main__":
 
-    input_text = "tests/test_chat.txt"
-    df = make_table(input_text)
+    df = make_table("input_txt/chat_family.txt")
     
-    print(day_hour_df(df, 1))
-    print(week_day_hour_df(df))
+    #print(day_hour_df(df, 1))
+    #print(day_hour_day_hour_df(df))
     
     #print(hour(df))
     #print(hour_am_pm(df))
@@ -271,7 +339,7 @@ if __name__ == "__main__":
     #print(day_part_am_pm(df))
     #print(day_hour_df(df, 1))
     #print(day_hour_am_pm_df(df, 1))
-    #print(week_day_hour_am_pm_df(df))
+    #print(day_hour_day_hour_am_pm_df(df))
     #print(am_pm_format(df))
     #print(hour_am_pm_df(df))
     
@@ -284,3 +352,6 @@ if __name__ == "__main__":
     #print(hour(make_table(input_text)))
     
     #print(day_hour_df(make_table(input_text), 1))
+    
+    dfs = day_hour_percentage_folder([df, make_table("input_txt/chat_family.txt")], title_list = ["woz mnghè", "chat_family"])   
+    print(dfs)

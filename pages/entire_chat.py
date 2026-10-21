@@ -1,15 +1,15 @@
 try:
 	from src.make_table_from_chat import make_table
-	from src.weekday_stats import weekday, weekday_df, weekday_folder
+	from src.weekday_stats import weekday, weekday_df, weekday_folder, find_max_week_dir, find_min_week_dir, weekday_percentage_folder
 	from src.words_stats import words_stats, count_messages_df, count_words_df, total_messages_dir, users_z_score
 	from src.day_stats import filter_messages_by_date, filter_messages_date_interval, message_date_list, filter_messages_days_interval, days_without_sending_message
 	from src.links_month import count_links, count_links_month, count_links_df, links_month_dir
 	from src.make_links_table import make_links_table, count_links, make_table_count_links, user_links_df, domains_df, make_domains_count_dir, group_chats_domains_dir
-	from src.month_stats import month_count, month_count_df, month_dir
+	from src.month_stats import month_count, month_count_df, month_dir, find_min_month_dir, find_max_month_dir, month_percentage_folder
 	from src.hour_stats import hour_df, day_part_df, hour_dir
-	from src.day_hour_stats import week_day_hour_df, hour_am_pm_df, week_day_hour_am_pm_df, am_pm_format, day_hour_dir
+	from src.day_hour_stats import week_day_hour_df, hour_am_pm_df, week_day_hour_am_pm_df, am_pm_format, day_hour_dir, day_hour_percentage_folder, find_min_day_hour_dir, find_max_day_hour_dir
 	from src.user_filter import filter_user_df
-	from src.season_stats import season_df, season_dir
+	from src.season_stats import season_df, season_dir, season_percentage_folder
 	from src.first_messages import first_message_each_day_df, first_message_each_day_user
 	from src.year_stats import year_messages_df, year_dir
 	from src.gini_index import gini
@@ -202,7 +202,21 @@ def Message_page(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 
 		elif len(df) != 0 and len(df)>1:
 			st.header("Chat messages")
-			st.write(total_messages_dir(df, title_list=filenames))	
+			st.write(total_messages_dir(df, title_list=filenames))
+			
+			chat_gini = []
+			
+			titles = filenames
+			
+			for i in range(len(df)):
+				chat_gini.append([titles[i], gini(count_words_df(df[i]).word_count)])
+			
+			chat_gini = DataFrame(chat_gini)
+			chat_gini.rename(columns = {0:"chat", 1:"gini"}, inplace=True)
+			chat_gini = chat_gini.sort_values("chat")
+			
+			st.header("Chat messages gini")
+			st.write(chat_gini)	
 			
 def Links_page(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 	
@@ -364,15 +378,24 @@ def Day_page(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 				st.header("Day hour stats")
 				st.write(day_hour_dir(df, title_list = filename))
 				
+				st.header("Day hour percentage")
+				dfs = day_hour_percentage_folder(df, title_list = filename)
+				st.write(dfs)
+				
+				st.header("Day hour min percentage")
+				st.write(find_min_day_hour_dir(dfs))
+				
+				st.header("Day hour max percentage")
+				st.write(find_max_day_hour_dir(dfs))
+				
 				st.header("Day hour heatmap")
 				df = day_hour_dir(df, title_list = filename)
 				title_label = list(df.title)
 				
-				df = df.drop(columns=["title"])
-
+				dfs = dfs.drop(columns=["title"])
 				with st.spinner("Loading..."):
-					plt.figure(figsize=(len(df.columns),len(df)))
-					sns.heatmap(df, annot=True, yticklabels=title_label, cmap="coolwarm")
+					plt.figure(figsize=(len(dfs.columns),len(dfs)))
+					sns.heatmap(dfs, annot=True, yticklabels=title_label, cmap="coolwarm")
 					st.pyplot(plt)
 
 def Weekday_page(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
@@ -389,17 +412,25 @@ def Weekday_page(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 		elif len(df) > 1:
 			st.header("Weekday stats")
 			st.write(weekday_folder(df, title_list = filenames))
+			
+			st.header("Weekday percentage stats")
+			dfs = weekday_percentage_folder(df, title_list = filenames)
+			st.write(dfs)
+			
+			st.header("Weekday min percentage stats")
+			st.write(find_min_week_dir(dfs))	
+			
+			st.header("Weekday max percentage stats")
+			st.write(find_max_week_dir(dfs))
 				
 			st.header("Weekday heatmap")
+			title_label = list(dfs.title)
 				
-			df = weekday_folder(df, title_list = filenames)
-			title_label = list(df.title)
-				
-			df = df.drop(columns=["title"])
+			dfs = dfs.drop(columns=["title"])
 
 			with st.spinner("Loading..."):
-				plt.figure(figsize=(len(df.columns), len(df)))
-				sns.heatmap(df, annot=True, yticklabels=title_label, cmap="coolwarm")
+				plt.figure(figsize=(len(dfs.columns), len(dfs)))
+				sns.heatmap(dfs, annot=True, yticklabels=title_label, cmap="coolwarm")
 				st.pyplot(plt)
 			
 def Months_page(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
@@ -416,17 +447,26 @@ def Months_page(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 		elif len(df) > 1:
 			st.header("Month messages")
 			st.write(month_dir(df, title_list=filenames))
+			
+			st.header("Month percentage stats")
+			dfs = month_percentage_folder(df, title_list=filenames)
+			st.write(dfs)
+			
+			st.header("Month min percentage stats")
+			st.write(find_min_month_dir(dfs))
+			
+			st.header("Month max percentage stats")
+			st.write(find_max_month_dir(dfs))
 				
 			st.header("Month heatmap")
 				
-			df = month_dir(df, title_list=filenames)
-			title_label = list(df.title)
+			title_label = list(dfs.title)
 				
-			df = df.drop(columns = ["title"])
+			dfs = dfs.drop(columns = ["title"])
 				
 			with st.spinner("Loading..."):
-				plt.figure(figsize = (len(df.columns), len(df)))
-				sns.heatmap(df, annot=True, yticklabels=title_label, cmap="coolwarm")
+				plt.figure(figsize = (len(dfs.columns), len(dfs)))
+				sns.heatmap(dfs, annot=True, yticklabels=title_label, cmap="coolwarm")
 				st.pyplot(plt)
 			
 def Year_page(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
@@ -460,16 +500,20 @@ def Year_page(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 			st.header("Season stats")
 			st.write(season_dir(df, title_list=filenames))
 			
+			st.header("Season percentage stats")
+			dfs = season_percentage_folder(df, title_list=filenames)
+			st.write(dfs)
+			
 			st.header("Season heatmap")
 			
 			df = season_dir(df, title_list=filenames)
 			
 			title_label = list(df.title)
-			df = df.drop(columns=["title"])
+			dfs = dfs.drop(columns=["title"])
 			
 			with st.spinner("Loading..."):
-				plt.figure(figsize = (len(df.columns), len(df)))
-				sns.heatmap(df, annot=True, yticklabels=title_label, cmap="coolwarm")
+				plt.figure(figsize = (len(dfs.columns), len(dfs)))
+				sns.heatmap(dfs, annot=True, yticklabels=title_label, cmap="coolwarm")
 				st.pyplot(plt)
 
 if __name__ == "__main__":

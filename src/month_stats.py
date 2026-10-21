@@ -7,7 +7,7 @@ except ModuleNotFoundError:
 from collections import Counter, OrderedDict
 from datetime import date
 from os import listdir
-from pandas import DataFrame
+from pandas import DataFrame, concat
 
 def month_count(df, date_format):
 
@@ -95,10 +95,79 @@ def month_dir(folder, destination=None, title_list=None):
 		df.to_csv(destination, index = True)
 	
 	return df
+
+def month_percentage(df: DataFrame, title: str) -> DataFrame:
+	
+	df = month_dir([df], title_list = [title])
+	df = df.set_index("title")
+	
+	res = df.div(df.sum(axis = 1), axis = 0)
+	res *= 100
+	
+	return res.reset_index()
+
+def month_percentage_folder(folder: list[DataFrame], title_list: list[str]) -> DataFrame:
+	
+	dfs = []
+	
+	for i in range(len(folder)):
+		dfs.append(month_percentage(folder[i], title_list[i]))
+	
+	df = concat(dfs)
+	
+	return df
+
+def find_max_month(df: DataFrame, index: int) -> list[str, str, float]:
+
+	max_value = max([i for i in df.iloc[index, :].dropna() if isinstance(i, float)])
+	titles = list(df.title)
+	
+	max_index = 0
+	for i in range(len(df.columns)):
+		if df.iloc[index, i] == max_value:
+			max_index = i
+			
+	return [titles[index], df.columns[max_index], max_value]
+
+def find_min_month(df: DataFrame, index: int) -> list[str, str, float]:
+
+	min_value = min([i for i in df.iloc[index, :].dropna() if isinstance(i, float)])
+	titles = list(df.title)
+	
+	min_index = 0
+	for i in range(len(df.columns)):
+		if df.iloc[index, i] == min_value:
+			min_index = i
+			
+	return [titles[index], df.columns[min_index], min_value]
+
+def find_max_month_dir(df: DataFrame) -> DataFrame:
+	
+	cols = []
+	
+	for i in range(len(df)):
+		cols.append(find_max_month(df, i))
+		
+	df = DataFrame(cols)
+	df.rename(columns = {0: "chat", 1: "month", 2:"percentage"}, inplace = True)
+	
+	return df
+
+def find_min_month_dir(df: DataFrame) -> DataFrame:
+	
+	cols = []
+	
+	for i in range(len(df)):
+		cols.append(find_min_month(df, i))
+		
+	df = DataFrame(cols)
+	df.rename(columns = {0: "chat", 1: "month", 2:"percentage"}, inplace = True)
+	
+	return df
 	
 if __name__ == "__main__":
 
-    input_text = "tests/chat_woz_mnghè.txt"
+	df = make_table("input_txt/chat_woz_mnghè.txt")
     
     #df = make_table(input_text)
     
@@ -107,3 +176,6 @@ if __name__ == "__main__":
     #print(month_dir("src/tests"))
     #print(month_dir([make_table("tests/chat_pasquetta.txt"), make_table("tests/chat_family.txt")], title_list=["test1","test2"]))
     
+	dfs = month_percentage_folder([df, make_table("input_txt/chat_family.txt")], title_list = ["woz mnghè", "chat_family"])   
+	
+	print(dfs)

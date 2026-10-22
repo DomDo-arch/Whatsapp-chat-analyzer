@@ -1,8 +1,13 @@
 from re import findall
 from datetime import date
 from pandas import DataFrame
+
+ios_format = False
+am_pm_format = False
+#date_format = "%d/%m/%y"
+#date_format = "%m/%d/%y"
     
-def make_table(input_text_file):
+def make_table(input_text_file: str, date_format = "%d/%m/%y") -> DataFrame:
     
     # Initialize empty lists to convert to columns
     dates = []
@@ -95,6 +100,6 @@ if __name__ == "__main__":
 	
 	#df = make_table("tests/ios_chat.txt")
 	#df = make_table("tests/chat_woz_mnghè.txt")
-	df = make_table("en_tests/en_chat.txt")
+	df = make_table("input_txt/en_chat.txt")
 			
-	print(df.hours)
+	print(df.weekday)

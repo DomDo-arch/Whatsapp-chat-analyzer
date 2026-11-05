@@ -46,7 +46,7 @@ try:
 		pg = navigation([Messages, Links, Hours, Days, Weekdays, Months, Years])
 		pg.run()
 except ValueError:
-	write("Detected at least a file with singular date format. Check that all the files have the same date format.")
+	write("Detected at least a file with singular date format. Check that all the files have the same date format, or change the date format from the left menu.")
 
 # Chat subset sections
 def Messages():

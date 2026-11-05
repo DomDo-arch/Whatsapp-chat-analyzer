@@ -172,17 +172,17 @@ def day_part_df(df):
 	
 	return df
 #
-def week_day_hour_df(df, day_hour):
+def day_hour_df(df, weekday):
 
-	day_hour_hour = []
+	weekday_hour = []
 	
 	for i in range(len(df)):
-		day_hour_hour.append([df.day_hour[i], df.hours[i].split(":")[0]])
+		weekday_hour.append([df.weekday[i], df.hours[i].split(":")[0]])
 		
 	mon_hour = []
 	
-	for i in day_hour_hour:
-		if i[0] == day_hour:
+	for i in weekday_hour:
+		if i[0] == weekday:
 			if i[1] != "":
 				mon_hour.append(int(i[1]))
 			
@@ -195,12 +195,12 @@ def week_day_hour_df(df, day_hour):
 #
 def week_day_hour_df(df):
 	
-	day_hour_day_hour_cols = []
+	week_day_hour_cols = []
 	
-	for day_hour in range(7):
-		day_hour_day_hour_cols.append(day_hour_df(df, day_hour))
+	for weekday in range(7):
+		week_day_hour_cols.append(day_hour_df(df, weekday))
 		
-	df = DataFrame(day_hour_day_hour_cols)
+	df = DataFrame(week_day_hour_cols)
 	
 	df.sort_index(axis=1, inplace=True)
 	
@@ -353,5 +353,11 @@ if __name__ == "__main__":
     
     #print(day_hour_df(make_table(input_text), 1))
     
-    dfs = day_hour_percentage_folder([df, make_table("input_txt/chat_family.txt")], title_list = ["woz mnghè", "chat_family"])   
-    print(dfs)
+    #dfs = day_hour_percentage_folder([df, make_table("input_txt/chat_family.txt")], title_list = ["woz mnghè", "chat_family"])   
+    #print(dfs)
+    
+    print(day_hour_df(make_table("input_txt/chat_family.txt"), 2))
+    #print(df)
+    #print(week_day_hour_df(df))
+    
+    #print(hour_df(df))

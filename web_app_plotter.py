@@ -17,7 +17,7 @@ ios_checkbox = sidebar.checkbox("ios", key="ios_cookie")
 am_pm_checkbox = sidebar.checkbox("am_pm", key="am_pm_cookie")
 date_selectbox = sidebar.selectbox("Date", ["%d/%m/%y", "%m/%d/%y", "%y/%m/%d"], key="date_cookie")
 
-
+date_format_error = "Detected at least a file with singular date format. Check that all the files have the same date format, or change the date format from the left menu."
 
 # Entire page sections
 def Messages():
@@ -46,8 +46,7 @@ try:
 		pg = navigation([Messages, Links, Hours, Days, Weekdays, Months, Years])
 		pg.run()
 except ValueError:
-	write("Detected at least a file with singular date format. Check that all the files have the same date format, or change the date format from the left menu.")
-
+	write(date_format_error)
 # Chat subset sections
 def Messages():
 	Message_page_subset(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox)

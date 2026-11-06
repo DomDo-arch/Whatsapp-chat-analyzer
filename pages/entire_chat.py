@@ -449,7 +449,7 @@ def Months_page(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 			st.write(month_dir(df, date_format=date_selectbox, title_list=filenames))
 			
 			st.header("Month percentage stats")
-			dfs = month_percentage_folder(df, title_list=filenames)
+			dfs = month_percentage_folder(df, date_format=date_selectbox, title_list=filenames)
 			st.write(dfs)
 			
 			st.header("Month min percentage stats")

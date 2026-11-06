@@ -52,7 +52,7 @@ def month_count_df(df, date_format):
 	return df
 
 #date_format = "%d/%m/%y"
-date_format = "%m/%d/%y"
+#date_format = "%m/%d/%y"
 
 def month_dir(folder, destination=None, title_list=None):
 	

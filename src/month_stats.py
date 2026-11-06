@@ -97,7 +97,7 @@ def month_dir(folder, date_format, destination=None, title_list=None):
 	
 	return df
 
-def month_percentage(df: DataFrame, title: str) -> DataFrame:
+def month_percentage(df: DataFrame, date_format: str, title: str) -> DataFrame:
 	
 	df = month_dir([df], date_format, title_list = [title])
 	df = df.set_index("title")

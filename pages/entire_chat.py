@@ -446,7 +446,7 @@ def Months_page(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 			st.bar_chart(month_messages, x="month", y="messages_count", sort=False)
 		elif len(df) > 1:
 			st.header("Month messages")
-			st.write(month_dir(df, title_list=filenames))
+			st.write(month_dir(df, date_format=date_selectbox, title_list=filenames))
 			
 			st.header("Month percentage stats")
 			dfs = month_percentage_folder(df, title_list=filenames)

@@ -51,7 +51,8 @@ def month_count_df(df, date_format):
 	
 	return df
 
-date_format = "%d/%m/%y"
+#date_format = "%d/%m/%y"
+date_format = "%m/%d/%y"
 
 def month_dir(folder, destination=None, title_list=None):
 	
@@ -167,7 +168,7 @@ def find_min_month_dir(df: DataFrame) -> DataFrame:
 	
 if __name__ == "__main__":
 
-	df = make_table("input_txt/chat_woz_mnghè.txt")
+	#df = make_table("input_txt/chat_woz_mnghè.txt")
     
     #df = make_table(input_text)
     
@@ -176,6 +177,10 @@ if __name__ == "__main__":
     #print(month_dir("src/tests"))
     #print(month_dir([make_table("tests/chat_pasquetta.txt"), make_table("tests/chat_family.txt")], title_list=["test1","test2"]))
     
-	dfs = month_percentage_folder([df, make_table("input_txt/chat_family.txt")], title_list = ["woz mnghè", "chat_family"])   
+	#dfs = month_percentage_folder([df, make_table("input_txt/chat_family.txt")], title_list = ["woz mnghè", "chat_family"]) 
+	
+	dfs = month_percentage_folder([make_table("input_txt/en_chat.txt", "%m/%d/%y")], title_list = ["en_chat"])  
 	
 	print(dfs)
+	
+	#print(make_table("input_txt/en_chat.txt", date_format = "%m/%d/%y"))

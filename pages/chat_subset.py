@@ -612,7 +612,7 @@ def Months_page_subset(input_txt, ios_checkbox, am_pm_checkbox, date_selectbox):
 			for i in dfs:
 				filtered_dfs.append(filter_messages_days_interval(i, i.date[len(i.date)-1], days_interval=days_interval, date_format=date_selectbox))
 			
-			df = month_dir(filtered_dfs, title_list = filename)
+			df = month_dir(filtered_dfs, date_format=date_selectbox, title_list = filename)
 			
 			st.header("Month stats")
 			st.write(df)

@@ -54,7 +54,7 @@ def month_count_df(df, date_format):
 #date_format = "%d/%m/%y"
 #date_format = "%m/%d/%y"
 
-def month_dir(folder, destination=None, title_list=None):
+def month_dir(folder, date_format, destination=None, title_list=None):
 	
 	month_list = []
 	
@@ -99,7 +99,7 @@ def month_dir(folder, destination=None, title_list=None):
 
 def month_percentage(df: DataFrame, title: str) -> DataFrame:
 	
-	df = month_dir([df], title_list = [title])
+	df = month_dir([df], date_format, title_list = [title])
 	df = df.set_index("title")
 	
 	res = df.div(df.sum(axis = 1), axis = 0)
@@ -107,12 +107,12 @@ def month_percentage(df: DataFrame, title: str) -> DataFrame:
 	
 	return res.reset_index()
 
-def month_percentage_folder(folder: list[DataFrame], title_list: list[str]) -> DataFrame:
+def month_percentage_folder(folder: list[DataFrame], date_format: str, title_list: list[str]) -> DataFrame:
 	
 	dfs = []
 	
 	for i in range(len(folder)):
-		dfs.append(month_percentage(folder[i], title_list[i]))
+		dfs.append(month_percentage(folder[i], date_format, title_list[i]))
 	
 	df = concat(dfs)
 	
